@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>AdminPage</title>
+</head>
+<body>
+
+<form th:action="@{/admin/add}" method="post">
+  <input type="hidden" name="_method" value="patch"/>
+  <label for = "person">enter people введите</label>
+  <select th:object="${person}" th:field="*{id}" id="person">
+      <option th:each="person:${people}" th:value="${person.getId()}"
+              th:text="${person.getName()}"></option>
+  </select>
+  <input type="submit" value="enter admin">
+</form>
+
+</body>
+</html>

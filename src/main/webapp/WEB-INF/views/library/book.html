@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book</title>
+</head>
+
+<body>
+<div>Страница книги</div>
+<div th:text="${book.bookName} + ', ' + ${book.author} + ', ' + ${book.yearBook}">book info</div>
+
+<!-- Проверяем, если person равен null -->
+<div th:if="${person == null}">
+    <div>книга свободна</div>
+    <form th:action="@{/admin/add}" method="post">
+        <input type="hidden" name="_method" value="patch"/>
+        <label for = "person">выберите человека</label>
+        <select th:object="${person}" th:field="*{id}" id="person">
+            <option th:each="person:${people}" th:value="${person.getId()}"
+                    th:text="${person.getName()}"></option>
+        </select>
+        <input type="submit" value="назначить книгу">
+    </form>
+</div>
+
+<!-- Проверяем, если person НЕ равен null -->
+<div th:unless="${person == null}">
+    <div>Книга сейчас у:</div>
+    <span th:text="${person.fullName}"></span>
+</div>
+
+<a th:href="@{/books/{id}/edit(id=${book.bookId})}">Edit</a>
+<form th:method="DELETE" th:action="@{/books/{id}(id=${book.bookId})}">
+    <input type="submit" value="Delete"/>
+</form>
+</body>
+</html>
