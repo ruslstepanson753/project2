@@ -28,39 +28,29 @@ public class PersonDAO {
         this.sessionFactory = sessionFactory;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<Person> index() {
         Session session = sessionFactory.getCurrentSession();
         return (List<Person>) session.createQuery("from Person",Person.class).stream().toList();
     }
 
-    public Optional<Person> show(String mail) {
-        return null;
-    }
-
+    @Transactional(readOnly = true)
     public Person show(Integer id) {
-        return null;    }
+        Session session = sessionFactory.getCurrentSession();
+        return session.get(Person.class, id);
+    }
 
+    @Transactional
     public void save(Person person) {
-
+        Session session = sessionFactory.getCurrentSession();
+        session.saveOrUpdate(person);
     }
 
-    public void update(int id, Person person) {
-
-    }
-
+    @Transactional
     public void delete(int id) {
-
+        Session session = sessionFactory.getCurrentSession();
+        Person person = session.get(Person.class, id);
+        session.delete(person);
     }
 
-    public void testMultipleUpdate() {
-
-    }
-
-    private List<Person> generate1000() {
-        return null;
-    }
-
-    public void testBatchUpdate() {
-    }
 }
