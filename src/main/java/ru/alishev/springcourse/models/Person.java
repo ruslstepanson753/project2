@@ -1,17 +1,25 @@
 package ru.alishev.springcourse.models;
 
 
+import javax.persistence.*;
 import javax.validation.constraints.*;
 
+@Entity
+@Table(name = "person")
 public class Person {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "person_id")
     private int personId;
 
     @NotEmpty(message = "Name should not be empty")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
+    @Column(name = "full_name")
     private String fullName;
 
     @Min(value = 0, message = "Age should be greater than 0")
+    @Column(name = "year_born")
     private int yearBorn;
 
     public Person() {

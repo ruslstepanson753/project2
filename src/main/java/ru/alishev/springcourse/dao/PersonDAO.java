@@ -1,12 +1,16 @@
 package ru.alishev.springcourse.dao;
 
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import ru.alishev.springcourse.models.Person;
 
 import java.sql.*;
@@ -17,12 +21,18 @@ import java.util.Optional;
 @Component
 public class PersonDAO {
 
-    public PersonDAO() {
+    private final SessionFactory sessionFactory;
 
+    @Autowired
+    public PersonDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
     }
 
+    @Transactional
     public List<Person> index() {
-        return null;    }
+        Session session = sessionFactory.getCurrentSession();
+        return (List<Person>) session.createQuery("from Person",Person.class).stream().toList();
+    }
 
     public Optional<Person> show(String mail) {
         return null;
