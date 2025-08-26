@@ -5,9 +5,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.alishev.springcourse.dao.BookDAO;
-import ru.alishev.springcourse.dao.PersonDAO;
 import ru.alishev.springcourse.models.Person;
 import ru.alishev.springcourse.models.Book;
+import ru.alishev.springcourse.repositories.PeopleRepository;
+import ru.alishev.springcourse.services.PeopleService;
 
 import java.util.List;
 
@@ -15,18 +16,18 @@ import java.util.List;
 @RequestMapping("/people")
 public class PersonController {
 
-    private final PersonDAO personDAO;
+    private final PeopleService peopleService;
     private final BookDAO bookDAO;
 
     @Autowired
-    public PersonController(PersonDAO personDAO, BookDAO bookDAO) {
-        this.personDAO = personDAO;
+    public PersonController(PeopleRepository peopleRepository, PeopleService peopleService, BookDAO bookDAO) {
+        this.peopleService = peopleService;
         this.bookDAO = bookDAO;
     }
 
     @GetMapping()
     public String peopleShow(Model model) {
-        List<Person> people = personDAO.index();
+        List<Person> people = peopleService.findAll();
         model.addAttribute("people", people);
         return "library/people";
     }
@@ -38,26 +39,26 @@ public class PersonController {
 
     @PostMapping()
     public String newPerson(@ModelAttribute("person") Person person,Model model) {
-        personDAO.save(person);
+        peopleService.save(person);
         return "redirect:/people";
     }
 
     @GetMapping("/{id}/edit")
     public String goToEditPerson(Model model, @PathVariable("id") int id) {
-        Person person = personDAO.show(id);
+        Person person = peopleService.findOne(id);
         model.addAttribute("person", person);
         return "library/editPerson";
     }
 
     @PatchMapping("/{id}")
     public String updatePerson(@ModelAttribute("person") Person person,Model model,@PathVariable("id") int id) {
-        personDAO.save(person);
+        peopleService.update(id,person);
         return "redirect:/people";
     }
 
     @GetMapping("/{id}")
     public String goToPerson(@PathVariable("id") int id, Model model) {
-        Person person = personDAO.show(id);
+        Person person = peopleService.findOne(id);
         List<Book> books = bookDAO.getBooksByPerson(person);
         model.addAttribute("person", person);
         model.addAttribute("books", books);
@@ -66,7 +67,7 @@ public class PersonController {
 
     @DeleteMapping("/{id}")
     public String deletePerson(@PathVariable("id") int id) {
-        personDAO.delete(id);
+        peopleService.delete(id);
         return "redirect:/people";
     }
 

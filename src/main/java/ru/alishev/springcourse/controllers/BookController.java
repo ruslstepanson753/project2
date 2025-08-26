@@ -5,26 +5,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.alishev.springcourse.dao.BookDAO;
-import ru.alishev.springcourse.dao.PersonDAO;
 import ru.alishev.springcourse.models.Book;
-import ru.alishev.springcourse.models.Person;
+import ru.alishev.springcourse.services.PeopleService;
 
 import java.util.List;
-import java.util.Optional;
-
-import static java.util.Optional.ofNullable;
 
 @Controller
 @RequestMapping("/books")
 public class BookController {
 
+    private final PeopleService peopleService;
     private final BookDAO bookDAO;
-    private final PersonDAO personDAO;
 
     @Autowired
-    public BookController(BookDAO bookDAO, PersonDAO personDAO) {
+    public BookController(PeopleService peopleService, BookDAO bookDAO) {
+        this.peopleService = peopleService;
         this.bookDAO = bookDAO;
-        this.personDAO = personDAO;
     }
 
     @GetMapping
@@ -64,7 +60,7 @@ public class BookController {
         Integer personId = book.getPersonId();
 
         if (personId != null) {
-            model.addAttribute("person", personDAO.show(personId));
+            model.addAttribute("person", peopleService.findOne(personId));
         } else {
             model.addAttribute("person", null);
         }
