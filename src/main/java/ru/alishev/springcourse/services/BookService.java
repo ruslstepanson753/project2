@@ -2,6 +2,7 @@ package ru.alishev.springcourse.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import ru.alishev.springcourse.models.Book;
 import ru.alishev.springcourse.models.Person;
 import ru.alishev.springcourse.repositories.BookRepository;
@@ -9,6 +10,7 @@ import ru.alishev.springcourse.repositories.PeopleRepository;
 
 import java.util.List;
 
+@Transactional(readOnly = true)
 @Service
 public class BookService {
     private final BookRepository bookRepository;
@@ -28,6 +30,7 @@ public class BookService {
         return bookRepository.findAll();
     }
 
+    @Transactional
     public void save(Book book) {
         bookRepository.save(book);
     }
@@ -36,6 +39,7 @@ public class BookService {
         return bookRepository.getById(id);
     }
 
+    @Transactional
     public void update(int id, Book book) {
         book.setBookId(id);
         bookRepository.save(book);

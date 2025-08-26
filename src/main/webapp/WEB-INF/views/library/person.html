@@ -11,7 +11,7 @@
 <div th:text="${person.fullName} + ', ' + ${person.yearBorn}">person</div>
 
 <div th:if="${books.isEmpty()}">
-  Список книг пуст ghb
+  Список книг пуст
 </div>
 
 <div th:unless="${books.isEmpty()}">
@@ -20,7 +20,7 @@
      <span th:text="${book.bookName} + ', ' + ${book.author} + ', ' + ${book.yearBook}"></span>
   </div>
 </div>
-<a th:href="@{/people/{id}/edit(id=${person.getPersonId()})}">Edit</a>
+<a th:href="@{'/people/' + ${person.personId} + '/edit'}">Edit</a>
 <form th:method="DELETE" th:action="@{/people/{id}(id=${person.getPersonId()})}">
   <input type="submit" value="Delete"/>
 </form>
