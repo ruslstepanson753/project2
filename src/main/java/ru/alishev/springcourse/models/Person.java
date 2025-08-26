@@ -3,6 +3,7 @@ package ru.alishev.springcourse.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.List;
 
 @Entity
 @Table(name = "person")
@@ -22,12 +23,27 @@ public class Person {
     @Column(name = "year_born")
     private int yearBorn;
 
+    @OneToMany(mappedBy = "person")
+    private List<Book> books;
+
     public Person() {
     }
 
     public Person(String fullName, int yearBorn) {
         this.fullName = fullName;
         this.yearBorn = yearBorn;
+    }
+
+    public void setPersonId(Integer personId) {
+        this.personId = personId;
+    }
+
+    public List<Book> getBooks() {
+        return books;
+    }
+
+    public void setBooks(List<Book> books) {
+        this.books = books;
     }
 
     public int getPersonId() {

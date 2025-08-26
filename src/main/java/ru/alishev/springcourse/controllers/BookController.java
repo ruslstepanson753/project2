@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.alishev.springcourse.dao.BookDAO;
 import ru.alishev.springcourse.models.Book;
+import ru.alishev.springcourse.services.BookService;
 import ru.alishev.springcourse.services.PeopleService;
 
 import java.util.List;
@@ -15,17 +15,17 @@ import java.util.List;
 public class BookController {
 
     private final PeopleService peopleService;
-    private final BookDAO bookDAO;
+    private final BookService bookService;
 
     @Autowired
-    public BookController(PeopleService peopleService, BookDAO bookDAO) {
+    public BookController(PeopleService peopleService, BookService bookService) {
         this.peopleService = peopleService;
-        this.bookDAO = bookDAO;
+        this.bookService = bookService;
     }
 
     @GetMapping
     public String getBooks(Model model) {
-        List<Book> books = bookDAO.getBooks();
+        List<Book> books = bookService.getBooks();
         model.addAttribute("books", books);
         return "library/books";
     }
@@ -37,26 +37,26 @@ public class BookController {
 
     @PostMapping()
     public String newBook(@ModelAttribute("book") Book book,Model model) {
-        bookDAO.save(book);
+        bookService.save(book);
         return "redirect:/books";
     }
 
     @GetMapping("/{id}/edit")
     public String goToEditBook(Model model, @PathVariable("id") int id) {
-        Book book = bookDAO.getBook(id);
+        Book book = bookService.getBook(id);
         model.addAttribute("book", book);
         return "library/editBook";
     }
 
     @PatchMapping("/{id}")
     public String updateBook(@ModelAttribute("book") Book book,Model model,@PathVariable("id") int id) {
-        bookDAO.update(id, book);
+        bookService.update(id, book);
         return "redirect:/books";
     }
 
     @GetMapping("/{id}")
     public String goToBook(@PathVariable("id") int id, Model model) {
-        Book book = bookDAO.getBook(id);
+        Book book = bookService.getBook(id);
         Integer personId = book.getPersonId();
 
         if (personId != null) {

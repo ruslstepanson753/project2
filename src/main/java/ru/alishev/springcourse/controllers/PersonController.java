@@ -4,10 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.alishev.springcourse.dao.BookDAO;
 import ru.alishev.springcourse.models.Person;
 import ru.alishev.springcourse.models.Book;
 import ru.alishev.springcourse.repositories.PeopleRepository;
+import ru.alishev.springcourse.services.BookService;
 import ru.alishev.springcourse.services.PeopleService;
 
 import java.util.List;
@@ -17,12 +17,12 @@ import java.util.List;
 public class PersonController {
 
     private final PeopleService peopleService;
-    private final BookDAO bookDAO;
+    private final BookService bookService;
 
     @Autowired
-    public PersonController(PeopleRepository peopleRepository, PeopleService peopleService, BookDAO bookDAO) {
+    public PersonController(PeopleService peopleService, BookService bookService) {
         this.peopleService = peopleService;
-        this.bookDAO = bookDAO;
+        this.bookService = bookService;
     }
 
     @GetMapping()
@@ -59,7 +59,7 @@ public class PersonController {
     @GetMapping("/{id}")
     public String goToPerson(@PathVariable("id") int id, Model model) {
         Person person = peopleService.findOne(id);
-        List<Book> books = bookDAO.getBooksByPerson(person);
+        List<Book> books = bookService.getBooksByPerson(person);
         model.addAttribute("person", person);
         model.addAttribute("books", books);
         return "library/person";

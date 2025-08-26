@@ -10,11 +10,11 @@
 <div>Страница человека</div>
 <div th:text="${person.fullName} + ', ' + ${person.yearBorn}">person</div>
 
-<div th:if="${books.empty}">
+<div th:if="${books.isEmpty()}">
   Список книг пуст ghb
 </div>
 
-<div th:unless="${books.empty}">
+<div th:unless="${books.isEmpty()}">
   <div>Книги:</div>
   <div th:each="book : ${books}">
      <span th:text="${book.bookName} + ', ' + ${book.author} + ', ' + ${book.yearBook}"></span>

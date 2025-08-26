@@ -1,25 +1,36 @@
 package ru.alishev.springcourse.models;
 
+import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
+@Entity
+@Table(name = "book")
 public class Book {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "book_id")
     private int bookId;
 
     @NotEmpty(message = "Name should not be empty")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
+    @Column(name = "book_name")
     private String bookName;
 
     @NotEmpty(message = "Name should not be empty")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters")
+    @Column(name = "author")
     private String author;
 
     @Min(value = 0, message = "Age should be greater than 0")
+    @Column(name = "year_book")
     private int yearBook;
 
-    private Integer personId;
+    @ManyToOne
+    @JoinColumn(name = "person_id",referencedColumnName = "person_id")
+    private Person person;
 
     public Book() {
     }
@@ -28,15 +39,6 @@ public class Book {
         this.bookName = bookName;
         this.author = author;
         this.yearBook = yearBook;
-        this.personId = personId;
-    }
-
-    public Book(int bookId, String bookName, String author, int yearBook, Integer personId) {
-        this.bookId = bookId;
-        this.bookName = bookName;
-        this.author = author;
-        this.yearBook = yearBook;
-        this.personId = personId;
     }
 
     public int getBookId() {
@@ -72,10 +74,18 @@ public class Book {
     }
 
     public Integer getPersonId() {
-        return personId;
+        return person.getPersonId();
     }
 
     public void setPersonId(Integer personId) {
-        this.personId = personId;
+        person.setPersonId(personId);
+    }
+
+    public Person getPerson() {
+        return person;
+    }
+
+    public void setPerson(Person person) {
+        this.person = person;
     }
 }
