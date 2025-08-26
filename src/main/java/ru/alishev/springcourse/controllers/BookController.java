@@ -85,4 +85,18 @@ public class BookController {
         return "redirect:/books" ;
     }
 
+    @PatchMapping("/freebook/{id}")
+    public String makeFreeBook(Model model,@PathVariable("id") int id) {
+        Book book = bookService.getBook(id);
+        book.setPerson(null);
+        bookService.update(id, book);
+        return "redirect:/books";
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteBook(Model model,@PathVariable("id") int id) {
+        bookService.delete(id);
+        return "redirect:/books";
+    }
+
 }

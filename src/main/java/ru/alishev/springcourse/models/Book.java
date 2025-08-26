@@ -28,7 +28,7 @@ public class Book {
     @Column(name = "year_book")
     private int yearBook;
 
-    @ManyToOne
+    @ManyToOne()
     @JoinColumn(name = "person_id",referencedColumnName = "person_id")
     private Person person;
 
@@ -78,6 +78,9 @@ public class Book {
     }
 
     public void setPerson(Person person) {
+        if (person == null) {
+            this.person = null;
+        }
         this.person = person;
     }
 }
