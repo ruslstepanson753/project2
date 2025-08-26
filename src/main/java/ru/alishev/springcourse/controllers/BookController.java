@@ -73,14 +73,11 @@ public class BookController {
     @PatchMapping("/addperson")
     public String addPerson(@ModelAttribute("person") Person person,
                             Model model,
-                            @ModelAttribute("personId") Integer personId,
                             @ModelAttribute("bookId") Integer bookId)
     {
         Book book = bookService.getBook(bookId);
-        Person person1 = peopleService.findOne(personId);
-
         // Устанавливаем связь
-        book.setPerson(person);
+        person.addBook(book);
         bookService.save(book);
         return "redirect:/books" ;
     }
@@ -88,6 +85,8 @@ public class BookController {
     @PatchMapping("/freebook/{id}")
     public String makeFreeBook(Model model,@PathVariable("id") int id) {
         Book book = bookService.getBook(id);
+        Person person = book.getPerson();
+        person.removeBook(book);
         book.setPerson(null);
         bookService.update(id, book);
         return "redirect:/books";

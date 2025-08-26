@@ -77,4 +77,9 @@ public class Person {
         books.add(book);
         book.setPerson(this);
     }
+
+    public void removeBook(Book book) {
+        book.setPerson(null);
+        books.remove(book);
+    }
 }

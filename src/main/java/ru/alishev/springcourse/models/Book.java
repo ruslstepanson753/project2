@@ -80,7 +80,8 @@ public class Book {
     public void setPerson(Person person) {
         if (person == null) {
             this.person = null;
+        } else {
+            this.person = person;
         }
-        this.person = person;
     }
 }
