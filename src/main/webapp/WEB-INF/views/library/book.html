@@ -10,16 +10,18 @@
 <div th:text="${book.bookName} + ', ' + ${book.author} + ', ' + ${book.yearBook}">book info</div>
 
 <!-- Проверяем, если person равен null -->
-<div th:if="${person == null}">
+<div th:if="${book.person == null}">
     <div>книга свободна</div>
-    <form th:action="@{/admin/add}" method="post">
+    <form th:action="@{/books/addperson}" method="post">
         <input type="hidden" name="_method" value="patch"/>
-        <label for = "person">выберите человека</label>
-        <select th:object="${person}" th:field="*{id}" id="person">
-            <option th:each="person:${people}" th:value="${person.getId()}"
-                    th:text="${person.getName()}"></option>
+        <input type="hidden" name="bookId" th:value="${book.bookId}"/>
+        <label for="person">выберите читателя для книги</label>
+        <select name="personId" id="person">
+            <option th:each="person : ${people}"
+                    th:value="${person.personId}"
+                    th:text="${person.fullName}"></option>
         </select>
-        <input type="submit" value="назначить книгу">
+        <input type="submit" value="Назначить читателя">
     </form>
 </div>
 

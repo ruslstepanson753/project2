@@ -28,7 +28,7 @@ public class Book {
     @Column(name = "year_book")
     private int yearBook;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "person_id",referencedColumnName = "person_id")
     private Person person;
 
@@ -87,5 +87,6 @@ public class Book {
 
     public void setPerson(Person person) {
         this.person = person;
+        person.addBook(this);
     }
 }

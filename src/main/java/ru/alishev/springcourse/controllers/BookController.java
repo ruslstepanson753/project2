@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.alishev.springcourse.models.Book;
+import ru.alishev.springcourse.models.Person;
 import ru.alishev.springcourse.services.BookService;
 import ru.alishev.springcourse.services.PeopleService;
 
@@ -57,16 +58,29 @@ public class BookController {
     @GetMapping("/{id}")
     public String goToBook(@PathVariable("id") int id, Model model) {
         Book book = bookService.getBook(id);
-        Integer personId = book.getPersonId();
+        Person person = book.getPerson();
 
-        if (personId != null) {
-            model.addAttribute("person", peopleService.findOne(personId));
+        if (person != null) {
+            model.addAttribute("person", peopleService.findOne(person.getPersonId()));
         } else {
             model.addAttribute("person", null);
         }
-
+        model.addAttribute("people", peopleService.findAll());
         model.addAttribute("book", book);
         return "library/book";
+    }
+
+    @PatchMapping("/addperson")
+    public String addPerson(@ModelAttribute("person") Person person,
+                            Model model,
+                            @ModelAttribute("personId") Integer personId,
+                            @ModelAttribute("bookId") Integer bookId)
+    {
+        Book book = bookService.getBook(bookId);
+        Person person1 = peopleService.findOne(personId);
+        book.setPerson(person1);
+        bookService.save(book);
+        return "redirect:/books" ;
     }
 
 }

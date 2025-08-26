@@ -36,7 +36,7 @@ public class BookService {
     }
 
     public Book getBook(int id) {
-        return bookRepository.getById(id);
+        return bookRepository.findById(id).get();
     }
 
     @Transactional

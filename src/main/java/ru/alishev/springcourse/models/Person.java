@@ -3,6 +3,7 @@ package ru.alishev.springcourse.models;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,7 +24,7 @@ public class Person {
     @Column(name = "year_born")
     private int yearBorn;
 
-    @OneToMany(mappedBy = "person",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "person",fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
     private List<Book> books;
 
     public Person() {
@@ -69,4 +70,10 @@ public class Person {
     }
 
 
+    public void addBook(Book book) {
+        if(books == null){
+            books = new ArrayList<>();
+        }
+        books.add(book);
+    }
 }
