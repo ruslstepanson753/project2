@@ -78,7 +78,9 @@ public class BookController {
     {
         Book book = bookService.getBook(bookId);
         Person person1 = peopleService.findOne(personId);
-        book.setPerson(person1);
+
+        // Устанавливаем связь
+        book.setPerson(person);
         bookService.save(book);
         return "redirect:/books" ;
     }

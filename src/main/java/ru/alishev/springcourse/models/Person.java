@@ -24,7 +24,7 @@ public class Person {
     @Column(name = "year_born")
     private int yearBorn;
 
-    @OneToMany(mappedBy = "person",fetch = FetchType.EAGER,cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "person",fetch = FetchType.EAGER)
     private List<Book> books;
 
     public Person() {
@@ -75,5 +75,6 @@ public class Person {
             books = new ArrayList<>();
         }
         books.add(book);
+        book.setPerson(this);
     }
 }

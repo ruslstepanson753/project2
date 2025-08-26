@@ -29,6 +29,9 @@
 <div th:unless="${person == null}">
     <div>Книга сейчас у:</div>
     <span th:text="${person.fullName}"></span>
+    <form th:method="DELETE" th:action="@{/books/{id}(id=${book.bookId})}">
+        <input type="submit" value="Delete"/>
+    </form>
 </div>
 
 <a th:href="@{/books/{id}/edit(id=${book.bookId})}">Edit</a>
