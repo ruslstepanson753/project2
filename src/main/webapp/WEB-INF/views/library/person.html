@@ -17,7 +17,12 @@
 <div th:unless="${books.isEmpty()}">
   <div>Книги:</div>
   <div th:each="book : ${books}">
-     <span th:text="${book.bookName} + ', ' + ${book.author} + ', ' + ${book.yearBook}"></span>
+    <div th:if="${book.isExpired()}">
+      <span style="color: red;" th:text="${book.bookName} + ', ' + ${book.author} + ', ' + ${book.yearBook}"></span>
+    </div>
+    <div th:unless="${book.isExpired()}">
+      <span  th:text="${book.bookName} + ', ' + ${book.author} + ', ' + ${book.yearBook}"></span>
+    </div>
   </div>
 </div>
 <a th:href="@{'/people/' + ${person.personId} + '/edit'}">Edit</a>

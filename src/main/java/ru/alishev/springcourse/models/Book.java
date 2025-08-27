@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "book")
@@ -32,6 +33,19 @@ public class Book {
     @JoinColumn(name = "person_id",referencedColumnName = "person_id")
     private Person person;
 
+    @Column(name = "taken_at") // Убрали @Temporal для LocalDateTime
+    private LocalDateTime takenAt;
+
+    @Transient
+    public boolean isExpired() {
+        if (takenAt == null) {
+            return false; // книга не взята, значит не просрочена
+        }
+
+        LocalDateTime tenDaysAgo = LocalDateTime.now().minusDays(10);
+        return takenAt.isBefore(tenDaysAgo);
+    }
+
     public Book() {
     }
 
@@ -39,6 +53,14 @@ public class Book {
         this.bookName = bookName;
         this.author = author;
         this.yearBook = yearBook;
+    }
+
+    public LocalDateTime getTakenAt() {
+        return takenAt;
+    }
+
+    public void setTakenAt(LocalDateTime takenAt) {
+        this.takenAt = takenAt;
     }
 
     public int getBookId() {
@@ -80,8 +102,10 @@ public class Book {
     public void setPerson(Person person) {
         if (person == null) {
             this.person = null;
+            setTakenAt(null);
         } else {
             this.person = person;
+            setTakenAt(LocalDateTime.now());
         }
     }
 }
