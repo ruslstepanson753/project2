@@ -71,4 +71,14 @@ public class BookService {
         return bookRepository.findAll(pageRequest).getContent();
     }
 
+    public Book searchBooks(String query) {
+        return bookRepository.findFirstByBookNameStartingWith(query);
+    }
+
+    public Book getBookWithPersonEager(int id) {
+        Book book = bookRepository.findById(id).get();
+        List<Book> books = book.getPerson().getBooks();
+        Hibernate.initialize(books);
+        return book;
+    }
 }

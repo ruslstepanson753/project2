@@ -6,5 +6,5 @@ import ru.alishev.springcourse.models.Book;
 
 @Repository
 public interface BookRepository extends JpaRepository<Book, Integer> {
-
+    Book findFirstByBookNameStartingWith(String prefix);
 }

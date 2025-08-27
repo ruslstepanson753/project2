@@ -90,10 +90,9 @@ public class BookController {
 
     @PatchMapping("/freebook/{id}")
     public String makeFreeBook(Model model,@PathVariable("id") int id) {
-        Book book = bookService.getBook(id);
+        Book book = bookService.getBookWithPersonEager(id);
         Person person = book.getPerson();
         person.removeBook(book);
-        book.setPerson(null);
         bookService.update(id, book);
         return "redirect:/books";
     }
@@ -102,6 +101,15 @@ public class BookController {
     public String deleteBook(Model model,@PathVariable("id") int id) {
         bookService.delete(id);
         return "redirect:/books";
+    }
+
+    @GetMapping("/search")
+    public String searchBooks(@RequestParam(name = "query",required = false) String query, Model model) {
+       if(query != null) {
+           Book book = bookService.searchBooks(query);
+           model.addAttribute("book", book);
+       }
+        return "library/bookSearch";
     }
 
 }
