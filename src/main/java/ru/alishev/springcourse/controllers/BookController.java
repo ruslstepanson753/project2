@@ -9,6 +9,7 @@ import ru.alishev.springcourse.models.Person;
 import ru.alishev.springcourse.services.BookService;
 import ru.alishev.springcourse.services.PeopleService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -25,8 +26,13 @@ public class BookController {
     }
 
     @GetMapping
-    public String getBooks(Model model) {
-        List<Book> books = bookService.getBooks();
+    public String getBooks(
+            Model model,
+            @RequestParam(value = "page" ,required = false) Integer page,
+            @RequestParam(value = "booksPerPage",required = false) Integer booksPerPage,
+            @RequestParam(value = "sortByYear",defaultValue = "false") boolean sortByYear) {
+        List<Book> books ;
+        books = bookService.getBooks(page, booksPerPage, sortByYear);
         model.addAttribute("books", books);
         return "library/books";
     }

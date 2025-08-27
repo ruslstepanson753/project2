@@ -1,5 +1,6 @@
 package ru.alishev.springcourse.services;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,5 +44,11 @@ public class PeopleService {
     @Transactional
     public void delete(int id) {
         peopleRepository.deleteById(id);
+    }
+
+    public Person findOneWithBooksEager(int id) {
+        Person person = findOne(id);
+        Hibernate.initialize(person.getBooks());
+        return person;
     }
 }

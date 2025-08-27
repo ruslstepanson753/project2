@@ -6,7 +6,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.alishev.springcourse.models.Person;
 import ru.alishev.springcourse.models.Book;
-import ru.alishev.springcourse.repositories.PeopleRepository;
 import ru.alishev.springcourse.services.BookService;
 import ru.alishev.springcourse.services.PeopleService;
 
@@ -58,8 +57,8 @@ public class PersonController {
 
     @GetMapping("/{id}")
     public String goToPerson(@PathVariable("id") int id, Model model) {
-        Person person = peopleService.findOne(id);
-        List<Book> books = bookService.getBooksByPerson(person);
+        Person person = peopleService.findOneWithBooksEager(id);
+        List<Book> books = person.getBooks();
         model.addAttribute("person", person);
         model.addAttribute("books", books);
         return "library/person";

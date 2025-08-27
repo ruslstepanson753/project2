@@ -1,6 +1,9 @@
 package ru.alishev.springcourse.services;
 
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.alishev.springcourse.models.Book;
@@ -22,8 +25,11 @@ public class BookService {
         this.peopleRepository = peopleRepository;
     }
 
+    @Transactional
     public List<Book> getBooksByPerson(Person person) {
-        return person.getBooks();
+        List<Book> books = person.getBooks();
+        Hibernate.initialize(books); // Инициализация в той же транзакции
+        return books;
     }
 
     public List<Book> getBooks() {
@@ -49,4 +55,20 @@ public class BookService {
     public void delete(int id) {
         bookRepository.deleteById(id);
     }
+
+    public List<Book> getBooks(Integer page, Integer booksPerPage, boolean sortByYear) {
+        if (page == null) page = 0;
+        if (booksPerPage == null) booksPerPage = 10;
+
+        PageRequest pageRequest;
+
+        if (sortByYear) {
+            pageRequest = PageRequest.of(page, booksPerPage, Sort.by("yearBook"));
+        } else {
+            pageRequest = PageRequest.of(page, booksPerPage);
+        }
+
+        return bookRepository.findAll(pageRequest).getContent();
+    }
+
 }
